@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Civil Engineering · Learning Hub</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- CSS RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --primary-soft: #e8f0fe;
+      --accent: #d32f2f;
+      --gray-bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text-main: #1e1e2f;
+      --text-soft: #5f6368;
+      --border-light: #e0e0e0;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+      --radius-card: 16px;
+      --radius-btn: 30px;
+      --bottom-nav-height: 70px;
+      --header-height: 60px;
+    }
+
+    body {
+      background: var(--gray-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* mobile-first container */
+    .app {
+      max-width: 480px;
+      width: 100%;
+      background: var(--gray-bg);
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- STICKY HEADER ---------- */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--card-bg);
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .header-left, .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-icon, .bell-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .menu-icon:hover, .bell-icon:hover { background: var(--primary-soft); }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.3px;
+      color: var(--primary-dark);
+    }
+    .logo i { color: var(--primary); margin-right: 4px; }
+
+    /* ---------- MAIN CONTENT (PADDING) ---------- */
+    .main-content {
+      flex: 1;
+      padding: 16px 12px 20px;
+      padding-bottom: calc(var(--bottom-nav-height) + 10px);
+    }
+
+    /* ---------- PAGES (VIEW SWITCH) ---------- */
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+
+    /* ---------- GREETING / BANNER ---------- */
+    .greeting {
+      margin-bottom: 16px;
+    }
+    .greeting h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .greeting span {
+      color: var(--primary);
+    }
+
+    .banner {
+      background: linear-gradient(145deg, #0d47a1, #1976d2);
+      border-radius: 24px;
+      padding: 20px 18px;
+      color: white;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .banner h3 { font-size: 1.3rem; font-weight: 700; }
+    .banner p { opacity: 0.9; margin-top: 4px; }
+    .banner i { font-size: 3rem; opacity: 0.8; }
+
+    /* grid menu 3 columns */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 8px;
+      margin: 20px 0 24px;
+    }
+    .grid-item {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 14px 4px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s;
+      border: 1px solid #f0f0f0;
+      cursor: pointer;
+    }
+    .grid-item i {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .grid-item span {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    /* testimonial */
+    .testimonial-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+      border-left: 5px solid var(--primary);
+    }
+
+    /* ---------- SUBJECTS PAGE TABS ---------- */
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0 20px;
+      border-bottom: 2px solid var(--border-light);
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 8px 0 12px;
+      color: var(--text-soft);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: 0.2s;
+      margin-right: 20px;
+    }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* circular subject cards */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px 10px;
+    }
+    .subject-card {
+      text-align: center;
+    }
+    .circle {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid white;
+      color: var(--primary-dark);
+      font-size: 2rem;
+    }
+    .subject-card span {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* live classes cards */
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 20px 0 12px;
+    }
+    .live-badge {
+      background: var(--accent);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .class-card, .prev-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .prev-card {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .thumbnail {
+      width: 70px;
+      height: 70px;
+      background: #cfd8dc;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #546e7a;
+    }
+    .btn-group button {
+      background: var(--primary-soft);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 30px;
+      margin-right: 8px;
+      font-weight: 500;
+      color: var(--primary-dark);
+      cursor: pointer;
+    }
+
+    /* course card */
+    .course-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+    .expiry {
+      color: #e65100;
+      font-weight: 500;
+      margin: 8px 0;
+    }
+
+    /* notifications */
+    .notif-item {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ---------- BOTTOM NAVIGATION ---------- */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      height: var(--bottom-nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      border-top: 1px solid var(--border-light);
+      z-index: 15;
+      backdrop-filter: blur(8px);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #757575;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: 0.15s;
+      padding: 6px 0;
+      flex: 1;
+    }
+    .nav-item i { font-size: 1.4rem; margin-bottom: 2px; }
+    .nav-item.active { color: var(--primary); font-weight: 500; }
+
+    /* ---------- SIDE DRAWER ---------- */
+    .drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s;
+    }
+    .drawer-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .side-drawer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 280px;
+      height: 100%;
+      background: white;
+      z-index: 60;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+    .side-drawer.open {
+      transform: translateX(0);
+    }
+    .drawer-profile {
+      padding: 20px 20px 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .drawer-profile i {
+      font-size: 2.8rem;
+      color: var(--primary);
+    }
+    .drawer-menu {
+      flex: 1;
+      padding: 16px 8px;
+    }
+    .drawer-item {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .drawer-item i { width: 24px; color: var(--primary); }
+    .drawer-item:hover { background: #f0f4ff; }
+    .social-row {
+      display: flex;
+      justify-content: space-around;
+      padding: 16px;
+      font-size: 1.4rem;
+      color: #444;
+    }
+
+    /* utility */
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- STICKY HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <i class="fas fa-bars menu-icon" id="menuToggle"></i>
+    </div>
+    <div class="logo">
+      <i class="fas fa-hard-hat"></i> Demo 
+    </div>
+    <div class="header-right">
+      <i class="far fa-bell bell-icon" id="bellIcon"></i>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT (PAGES) -->
+  <main class="main-content" id="mainContent">
+    <!-- HOME PAGE -->
+    <div id="homePage" class="page active">
+      <div class="greeting">
+        <h2>Hello, <span>Rahul Sharma</span> 👋</h2>
+      </div>
+      <!-- Banner (slider style, static but polished) -->
+      <div class="banner">
+        <div>
+          <h3>Master Structural Design</h3>
+          <p>50% off · Limited seats</p>
+        </div>
+        <i class="fas fa-drafting-compass"></i>
+      </div>
+      <!-- Grid Menu 3 columns -->
+      <div class="grid-3">
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-book-open"></i><span>Courses</span></div>
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-file-alt"></i><span>Test Series</span></div>
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-calendar-alt"></i><span>Upcoming</span></div>
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-book"></i><span>E-Books</span></div>
+        <div class="grid-item" data-nav="notifications"><i class="fas fa-bullhorn"></i><span>Exam Updates</span></div>
+        <div class="grid-item" data-nav="live"><i class="fab fa-youtube"></i><span>YouTube</span></div>
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-video"></i><span>Shorts</span></div>
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-file-pdf"></i><span>Free PDF</span></div>
+        <div class="grid-item" data-nav="subjects"><i class="fas fa-users"></i><span>Social</span></div>
+      </div>
+      <!-- Testimonials (optional) -->
+      <div class="testimonial-card">
+        <i class="fas fa-quote-left" style="color:var(--primary); opacity:0.5;"></i>
+        <p style="margin:8px 0">"Best civil engineering app! The soil mechanics lectures are top-notch."</p>
+        <small>— Priya M., GATE Aspirant</small>
+      </div>
+    </div>
+
+    <!-- SUBJECTS PAGE (with tabs) -->
+    <div id="subjectsPage" class="page">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="liveTab">Live</button>
+        <button class="tab-btn" data-tab="subjectsTab">Subjects</button>
+      </div>
+      <!-- Live tab content -->
+      <div id="liveTab" class="tab-content active">
+        <div class="class-card">
+          <div style="display:flex; align-items:center;"><strong>Bridge Engineering Basics</strong><span class="live-badge">LIVE</span></div>
+          <div style="margin:8px 0">📅 Today, 7:30 PM · 45 min</div>
+        </div>
+        <div class="class-card">
+          <div><strong>Fluid Mechanics Q&A</strong><span class="live-badge">LIVE</span></div>
+          <div style="margin:8px 0">📅 Tomorrow, 11:00 AM</div>
+        </div>
+      </div>
+      <!-- Subjects tab content (circular cards) -->
+      <div id="subjectsTab" class="tab-content">
+        <div class="subject-grid" id="subjectGridContainer"></div>
+      </div>
+    </div>
+
+    <!-- LIVE CLASSES PAGE -->
+    <div id="livePage" class="page">
+      <div class="section-title">🔴 Upcoming Classes</div>
+      <div class="class-card">
+        <div><strong>RCC Column Design</strong> <span class="live-badge">LIVE</span></div>
+        <div>📅 15 Apr, 2026 · 6:00 PM</div>
+      </div>
+      <div class="class-card">
+        <div><strong>Tunnel Engineering intro</strong> <span class="live-badge">LIVE</span></div>
+        <div>📅 16 Apr, 2026 · 8:30 PM</div>
+      </div>
+      <div class="section-title">📼 Previous Sessions</div>
+      <div class="prev-card">
+        <div class="thumbnail"><i class="fas fa-play fa-2x"></i></div>
+        <div style="flex:1"><strong>RCC Column</strong><p style="font-size:0.8rem;">2 days ago</p></div>
+        <div class="btn-group">
+          <button><i class="fas fa-play"></i> Watch</button>
+          <button><i class="far fa-file-pdf"></i> PDF</button>
+        </div>
+      </div>
+      <div class="prev-card">
+        <div class="thumbnail"><i class="fas fa-play fa-2x"></i></div>
+        <div style="flex:1"><strong>Soil Mechanics</strong><p style="font-size:0.8rem;">5 days ago</p></div>
+        <div class="btn-group">
+          <button><i class="fas fa-play"></i> Watch</button>
+          <button><i class="far fa-file-pdf"></i> PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSE PAGE -->
+    <div id="coursePage" class="page">
+      <div class="course-card">
+        <h3>📘 Free Classes & Demo Videos</h3>
+        <p class="expiry"><i class="far fa-calendar-alt"></i> Expiry: 31 Dec 2026</p>
+        <p style="margin:16px 0">Access 40+ hours of demo lectures, structural design, and PDF notes.</p>
+        <button class="btn-primary"><i class="fas fa-eye"></i> View Course</button>
+      </div>
+      <div class="course-card" style="margin-top:16px;">
+        <h3>🏗️ Advanced Structural Analysis</h3>
+        <p class="expiry">Expiry: 15 Aug 2026</p>
+        <button class="btn-primary">View Course</button>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS PAGE -->
+    <div id="notificationsPage" class="page">
+      <div class="notif-item">
+        <h4>📢 New E-book Available</h4>
+        <p>Download "Bridge Engineering Notes" free.</p>
+        <small>⏱️ 2 hours ago</small>
+      </div>
+      <div class="notif-item">
+        <h4>🔔 Live class reminder</h4>
+        <p>Fluid Mechanics starts in 30 mins.</p>
+        <small>⏱️ Yesterday</small>
+      </div>
+      <div class="notif-item">
+        <h4>✅ Exam Update: SSC JE 2026</h4>
+        <p>Notification released, check details.</p>
+        <small>⏱️ 3 days ago</small>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS PAGE (placeholder for bottom nav) -->
+    <div id="downloadsPage" class="page">
+      <div style="padding:16px; background:white; border-radius:24px;">
+        <h3><i class="fas fa-download"></i> My Downloads</h3>
+        <div style="margin-top:20px;"><i class="fas fa-file-pdf"></i> Soil_Mechanics_Notes.pdf</div>
+        <div style="margin:16px 0;"><i class="fas fa-video"></i> RCC_Column_recording.mp4</div>
+        <p style="color:gray;">Offline access enabled</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-page="home"><i class="fas fa-home"></i><span>Home</span></div>
+    <div class="nav-item" data-page="course"><i class="fas fa-play-circle"></i><span>My Courses</span></div>
+    <div class="nav-item" data-page="live"><i class="fas fa-video"></i><span>Live</span></div>
+    <div class="nav-item" data-page="downloads"><i class="fas fa-download"></i><span>Downloads</span></div>
+    <div class="nav-item" id="whatsappNav"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></div>
+  </nav>
+
+  <!-- SIDE DRAWER (overlay) -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-profile">
+      <i class="fas fa-user-circle"></i>
+      <div><strong>Rahul Sharma</strong><br><small>rahul.civil@email.com</small></div>
+    </div>
+    <div class="drawer-menu">
+      <div class="drawer-item" data-nav="home"><i class="fas fa-home"></i> Home</div>
+      <div class="drawer-item"><i class="fas fa-shopping-bag"></i> Purchases</div>
+      <div class="drawer-item"><i class="fas fa-comment-dots"></i> Chat</div>
+      <div class="drawer-item"><i class="fas fa-star"></i> Rate</div>
+      <div class="drawer-item"><i class="fas fa-user-plus"></i> Refer & Earn</div>
+      <div class="drawer-item"><i class="fas fa-share-alt"></i> Share</div>
+      <div class="drawer-item"><i class="fas fa-cog"></i> Settings</div>
+      <div class="drawer-item"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </div>
+    <div class="social-row">
+      <i class="fab fa-youtube"></i>
+      <i class="fab fa-telegram"></i>
+      <i class="fab fa-instagram"></i>
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-whatsapp"></i>
+    </div>
+  </aside>
+</div>
+
+<script>
+  (function(){
+    "use strict";
+
+    // ----- DOM elements -----
+    const pages = {
+      home: document.getElementById('homePage'),
+      subjects: document.getElementById('subjectsPage'),
+      live: document.getElementById('livePage'),
+      course: document.getElementById('coursePage'),
+      notifications: document.getElementById('notificationsPage'),
+      downloads: document.getElementById('downloadsPage')
+    };
+    const navItems = document.querySelectorAll('.nav-item');
+    const drawer = document.getElementById('sideDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const menuToggle = document.getElementById('menuToggle');
+    const bellIcon = document.getElementById('bellIcon');
+    
+    // Subject grid data (circular cards)
+    const subjectsList = [
+      'Demo & Introduction', 'Engineering Mechanics', 'Geography', 'Indian Polity',
+      'History', 'Current Affairs', 'Indian Economy', 'Bridge Engineering',
+      'Tunnel Engineering', 'Fluid Mechanics', 'Strength of Materials', 'Soil Mechanics'
+    ];
+
+    // Populate subject grid
+    const subjectGrid = document.getElementById('subjectGridContainer');
+    if (subjectGrid) {
+      subjectsList.forEach(sub => {
+        const card = document.createElement('div');
+        card.className = 'subject-card';
+        card.innerHTML = `<div class="circle"><i class="fas fa-${getIconForSubject(sub)}"></i></div><span>${sub}</span>`;
+        subjectGrid.appendChild(card);
+      });
+    }
+    function getIconForSubject(name) {
+      if (name.includes('Mechanics')) return 'cogs';
+      if (name.includes('Fluid')) return 'water';
+      if (name.includes('Soil')) return 'mountain';
+      if (name.includes('Bridge')) return 'bridge';
+      if (name.includes('Tunnel')) return 'road';
+      if (name.includes('Strength')) return 'weight-hanging';
+      return 'graduation-cap';
+    }
+
+    // ----- Helper: switch page -----
+    function switchPage(pageId) {
+      // Hide all pages
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      if (pages[pageId]) pages[pageId].classList.add('active');
+      
+      // Update bottom nav active state
+      navItems.forEach(item => {
+        const page = item.dataset.page;
+        item.classList.remove('active');
+        if (page === pageId) item.classList.add('active');
+      });
+      
+      // Special: if subjects page, ensure default tab is active
+      if (pageId === 'subjects') {
+        document.querySelector('[data-tab="liveTab"]').classList.add('active');
+        document.querySelector('[data-tab="subjectsTab"]').classList.remove('active');
+        document.getElementById('liveTab').classList.add('active');
+        document.getElementById('subjectsTab').classList.remove('active');
+      }
+      
+      // Close drawer if open
+      drawer.classList.remove('open');
+      overlay.classList.remove('show');
+    }
+
+    // ----- Event: Bottom navigation -----
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        const page = item.dataset.page;
+        if (page) switchPage(page);
+        if (item.id === 'whatsappNav') {
+          alert('📲 Opening WhatsApp community link (demo)');
+        }
+      });
+    });
+
+    // ----- Drawer toggle & close -----
+    menuToggle.addEventListener('click', () => {
+      drawer.classList.add('open');
+      overlay.classList.add('show');
+    });
+    overlay.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+    // Close drawer when clicking drawer menu items (navigation)
+    document.querySelectorAll('.drawer-item[data-nav]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        const nav = item.dataset.nav;
+        if (nav === 'home') switchPage('home');
+        else if (nav === 'subjects') switchPage('subjects');
+        else if (nav === 'live') switchPage('live');
+        else if (nav === 'course') switchPage('course');
+        else if (nav === 'notifications') switchPage('notifications');
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+    });
+    // Other drawer items (just demo)
+    document.querySelectorAll('.drawer-item:not([data-nav])').forEach(el => {
+      el.addEventListener('click', () => {
+        alert('✨ ' + el.innerText.trim() + ' (demo)');
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+    });
+
+    // Bell icon -> go to notifications
+    bellIcon.addEventListener('click', () => switchPage('notifications'));
+
+    // Grid menu quick navigation (Courses → subjects)
+    document.querySelectorAll('.grid-item[data-nav]').forEach(el => {
+      el.addEventListener('click', () => {
+        const nav = el.dataset.nav;
+        if (nav === 'subjects') switchPage('subjects');
+        else if (nav === 'live') switchPage('live');
+        else if (nav === 'notifications') switchPage('notifications');
+      });
+    });
+
+    // Tabs: Live / Subjects within subjects page
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const liveTabContent = document.getElementById('liveTab');
+    const subjectsTabContent = document.getElementById('subjectsTab');
+    
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab; // 'liveTab' or 'subjectsTab'
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (tabId === 'liveTab') {
+          liveTabContent.classList.add('active');
+          subjectsTabContent.classList.remove('active');
+        } else {
+          subjectsTabContent.classList.add('active');
+          liveTabContent.classList.remove('active');
+        }
+      });
+    });
+
+    // "View Course" buttons, watch buttons - simulated
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-primary')) {
+        e.preventDefault();
+        alert('📚 Opening course details (demo)');
+      }
+      if (e.target.closest('.btn-group button')) {
+        const txt = e.target.innerText.includes('Watch') ? '▶️ Playing video' : '📄 Opening PDF';
+        alert(txt + ' (demo)');
+      }
+    });
+
+    // Sticky header already via CSS, bottom nav fixed.
+    // Simulate responsive and smooth UI.
+
+    // Optional: banner slider (simple rotation) but static okay.
+    // Extra: Click on social row icons in drawer
+    document.querySelectorAll('.social-row i').forEach(icon => {
+      icon.addEventListener('click', () => alert('🌐 Social link (demo)'));
+    });
+
+    // Pre-select active bottom nav based on initial page
+    // Ensure side drawer closes on escape key (optional)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    });
+
+    // minor: make grid items interactive
+  })();
+</script>
+<!-- ensure FontAwesome icons display properly -->
+</body>
+</html>
