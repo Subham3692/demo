@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <title>Demo Cake 🎂 · Bakery &amp; Cakes · Mangaldoi</title>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fef7f2;
+      color: #2c1e17;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :root {
+      --primary: #d94f2b;      /* warm terracotta */
+      --primary-soft: #fbe7de;
+      --gold: #f5b342;
+      --card-white: #ffffff;
+      --border-light: #f5d9cd;
+      --shadow-sm: 0 10px 25px -8px rgba(217, 79, 43, 0.08);
+      --shadow-md: 0 15px 30px -10px rgba(0,0,0,0.08);
+      --radius-card: 24px;
+      --radius-btn: 60px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    /* animations */
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* sticky nav */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(254, 242, 234, 0.9);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(217, 79, 43, 0.15);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo i {
+      font-size: 2.2rem;
+      color: var(--primary);
+    }
+    .logo span {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .logo small {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-weight: 600;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #2e241e;
+      font-size: 0.95rem;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: white;
+      border: 1px solid #e7cfc0;
+      padding: 10px 14px;
+      border-radius: 40px;
+      font-size: 1.3rem;
+      color: var(--primary);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    /* mobile dropdown */
+    .mobile-nav {
+      position: fixed;
+      top: 70px;
+      right: 16px;
+      width: 85%;
+      max-width: 320px;
+      display: none;
+      flex-direction: column;
+      background: white;
+      padding: 12px 18px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      border: 1px solid #f5ded0;
+      z-index: 999;
+    }
+    .mobile-nav.show { display: flex; }
+    .mobile-nav a {
+      padding: 16px 8px;
+      border-bottom: 1px solid #f0dbcf;
+      font-weight: 600;
+      text-decoration: none;
+      color: #2c1e14;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a i { width: 24px; color: var(--primary); }
+
+    /* carousel */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      margin: 16px 0 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .carousel-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .carousel-slide {
+      min-width: 100%;
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      color: white;
+      text-shadow: 0 2px 10px black;
+    }
+    .carousel-slide h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: #ccc;
+      border-radius: 20px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: var(--primary);
+      width: 24px;
+    }
+
+    /* sections */
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 36px 0 20px;
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-card {
+      background: var(--card-white);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stars {
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+    .service-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .chip {
+      background: #f7e8de;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 500;
+    }
+
+    /* filter bar */
+    .filter-bar {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: white;
+      border: 1px solid #e7cfc0;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .menu-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s;
+    }
+    .menu-card:active { transform: scale(0.98); }
+    .menu-img {
+      width: 100%;
+      height: 100px;
+      border-radius: 16px;
+      background-size: cover;
+      margin-bottom: 10px;
+    }
+    .menu-price {
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 6px;
+    }
+
+    /* about */
+    .about-text {
+      background: #fcf2ea;
+      padding: 24px;
+      border-radius: 28px;
+      margin: 20px 0;
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .map-container {
+      border-radius: 28px;
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* floating whatsapp */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+      z-index: 200;
+      transition: transform 0.2s;
+      text-decoration: none;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 601px) {
+      .container { max-width: 700px; }
+      .mobile-nav { display: none !important; }
+    }
+
+    .text-center { text-align: center; }
+    .owner-badge {
+      display: inline-block;
+      background: var(--primary-soft);
+      padding: 4px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  
+  <!-- Sticky Navigation -->
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-cake-candles"></i>
+      <span>Demo Cake <small>🎂💖</small></span>
+    </div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#menu">Cakes</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Find us</a>
+    </div>
+    <div class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </div>
+  </nav>
+
+  <!-- Mobile dropdown navigation -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#home"><i class="fas fa-home"></i> Home</a>
+    <a href="#menu"><i class="fas fa-cupcake"></i>🎂 Our Cakes</a>
+    <a href="#about"><i class="fas fa-heart"></i> About</a>
+    <a href="#reviews"><i class="fas fa-star"></i> Reviews</a>
+    <a href="#contact"><i class="fas fa-map-pin"></i> Contact</a>
+  </div>
+
+  <!-- Auto-sliding banner carousel (cake themed) -->
+  <div id="home"></div>
+  <div class="carousel-container">
+    <div class="carousel-slides" id="carouselSlides" style="transform: translateX(-200%);">
+      <div class="carousel-slide" style="background-image: linear-gradient(0deg, #00000070, transparent), url('https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800');">
+        <h3>Handcrafted Cakes<br>for every occasion 🎂</h3>
+      </div>
+      <div class="carousel-slide" style="background-image: linear-gradient(0deg, #00000070, transparent), url('https://images.pexels.com/photos/1055272/pexels-photo-1055272.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800');">
+        <h3>Bento Cakes · Cupcakes<br>Pizza &amp; more</h3>
+      </div>
+      <div class="carousel-slide" style="background-image: linear-gradient(0deg, #00000070, transparent), url('https://images.pexels.com/photos/264909/pexels-photo-264909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800');">
+        <h3>Delicious · Soft<br>Not too sweet 💖</h3>
+      </div>
+    </div>
+  </div>
+  <div class="carousel-dots" id="carouselDots"><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+
+  <!-- Overview card -->
+  <div class="info-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div class="rating-row">
+          <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> 4.9</span>
+          <span>(20 reviews) · by Vagyasmita Choudhury</span>
+        </div>
+        <p style="margin-top: 8px;"><i class="fas fa-map-pin" style="color:var(--primary);"></i> Ward No.1, Mangaldoi, Assam 784125</p>
+        <p><i class="fas fa-tag"></i> C2MM+Q5 Mangaldoi · facebook.comDemocoake/p>
+      </div>
+      <i class="fas fa-heart" style="font-size: 2.2rem; color: #e07a5f;"></i>
+    </div>
+    <div class="service-chips">
+      <span class="chip"><i class="fas fa-bag-shopping"></i> Takeaway</span>
+      <span class="chip"><i class="fas fa-truck"></i> Delivery</span>
+      <span class="chip"><i class="fas fa-clock"></i> 9AM–9PM</span>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 6px;">
+      <span class="owner-badge"><i class="far fa-clock"></i> Add hours</span>
+      <span class="owner-badge"><i class="fas fa-phone"></i> Add phone</span>
+    </div>
+  </div>
+
+  <!-- MENU section with switch/filter (cakes varieties) -->
+  <div id="menu"></div>
+  <h2 class="section-title">🧁 Our Sweet Menu</h2>
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-btn active" data-cat="all">All treats</div>
+    <div class="filter-btn" data-cat="cake">🎂 Cakes</div>
+    <div class="filter-btn" data-cat="cupcake">🧁 Cupcakes</div>
+    <div class="filter-btn" data-cat="pizza">🍕 Pizza</div>
+    <div class="filter-btn" data-cat="bento">🎁 Bento Cakes</div>
+    <div class="filter-btn" data-cat="pastry">🥐 Pastries</div>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Signature Chocolate Cake</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Rich, moist, decoration</div>
+          <div class="menu-price">₹550</div>
+        </div>
+      
+        
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/264909/pexels-photo-264909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Black Forest Cake</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Cherries &amp; cream</div>
+          <div class="menu-price">₹580</div>
+        </div>
+      
+        
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Chocolate Cupcake</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Soft, not too sweet</div>
+          <div class="menu-price">₹70</div>
+        </div>
+      
+        
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Margherita Pizza</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Cheesy, fresh basil</div>
+          <div class="menu-price">₹180</div>
+        </div>
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Veggie Supreme Pizza</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Loaded with veggies</div>
+          <div class="menu-price">₹220</div>
+        </div>
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/264909/pexels-photo-264909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Bento Cake (Mini)</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Surprise design</div>
+          <div class="menu-price">₹350</div>
+        </div>
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Custom Bento Cake</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Personalised message</div>
+          <div class="menu-price">₹420</div>
+        </div>
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Chocolate Pastry</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Layered ganache</div>
+          <div class="menu-price">₹80</div>
+        </div>
+      
+        
+      
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/264909/pexels-photo-264909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300');"></div>
+          <h4>Cheesecake slice</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">Baked New York style</div>
+          <div class="menu-price">₹130</div>
+        </div>
+      </div>
+
+  <!-- ABOUT section (cake shop story) -->
+  <div id="about"></div>
+  <h2 class="section-title">💝 About Demo Cake</h2>
+  <div class="about-text">
+    <p style="font-size: 1.2rem; font-weight: 600;">By Vagyasmita Choudhury</p>
+    <p>Welcome to <strong>Demo Cake 🎂💖</strong> – your neighborhood bakery in Mangaldoi. We bake fresh, handcrafted cakes, bento surprises, cupcakes, and even delicious pizza. Every item is made with love and premium ingredients. "The cake was delicious and well decorated – worth the price" – our customers say.</p>
+    <p style="margin-top:16px;"><i class="fas fa-check-circle" style="color:var(--primary);"></i> Specialties: bento cakes, signature chocolate cake, red velvet cupcakes, cheesy pizza.</p>
+    <p><i class="fas fa-store"></i> Takeaway &amp; delivery available. Custom cake orders welcome.</p>
+    <p><i class="fas fa-star" style="color:var(--gold);"></i> Rated 4.9 ★ by Demo fakes.</p>
+  </div>
+
+  <!-- REVIEWS section (real reviews from text) -->
+  <div id="reviews"></div>
+  <h2 class="section-title">⭐ What customers say</h2>
+  
+  <div class="review-card">
+    <div style="display:flex; gap:12px;"><i class="fas fa-user-circle" style="font-size:2.5rem; color:#b45f44;"></i> <div><strong>Maina Baruah</strong><br>3 reviews · 1 photo · 2 months ago</div></div>
+    <div style="color:var(--gold);">★★★★★</div>
+    <p>“Highly recommend, best cake I’ve ever had.”</p>
+    <div style="font-size:0.9rem; margin: 6px 0;">Atmosphere: 5</div>
+    <div style="background: #fef0e9; padding: 12px; border-radius: 18px; margin-top: 10px;">
+      <i class="fas fa-reply"></i> <strong>Response from the owner</strong> · Thank you ma'am ☺️
+    </div>
+  </div>
+
+  <div class="review-card">
+    <div style="display:flex; gap:12px;"><i class="fas fa-user-circle" style="font-size:2.5rem; color:#b45f44;"></i> <div><strong>Chinmoy Saharia</strong><br>2 reviews · 1 photo · a month ago</div></div>
+    <div style="color:var(--gold);">★★★★★</div>
+    <p>“Taste of the bento cakes were really awesome 😋.... Loved it ♥️🤞”</p>
+    <div>Food: 5</div>
+    <div style="background: #fef0e9; padding: 12px; border-radius: 18px; margin-top: 10px;">
+      <i class="fas fa-reply"></i> <strong>Response from the owner</strong> · Thank You Sir 😊
+    </div>
+  </div>
+
+  <div class="review-card">
+    <div style="display:flex; gap:12px;"><i class="fas fa-user-circle" style="font-size:2.5rem; color:#b45f44;"></i> <div><strong>Rishab Das</strong><br>3 reviews · 2 months ago</div></div>
+    <div style="color:var(--gold);">★★★★★</div>
+    <p>“I have tasted the various cake Its was very delicious..❤️👌”</p>
+    <div>Food: 5</div>
+    <div style="background: #fef0e9; padding: 12px; border-radius: 18px; margin-top: 10px;">
+      <i class="fas fa-reply"></i> <strong>Response from the owner</strong> · Thank you Sir 😊
+    </div>
+  </div>
+
+  <div class="review-card">
+    <div style="display:flex; gap:12px;"><i class="fas fa-user-circle" style="font-size:2.5rem; color:#b45f44;"></i> <div><strong>Pizza lover</strong></div></div>
+    <div style="color:var(--gold);">★★★★★</div>
+    <p>“Pizza 🍕 was really awesome and very delicious and your service is too good.😊”</p>
+  </div>
+
+  <p style="margin-top: 8px;"><span class="owner-badge"><i class="far fa-edit"></i> Write a review</span> · 20 reviews total</p>
+
+  <!-- CONTACT & GOOGLE MAP (using provided link) -->
+  <div id="contact"></div>
+  <h2 class="section-title">📍 Visit us</h2>
+  <div class="info-card">
+    <p><i class="fas fa-map-marker-alt"></i> Ward No.1, Mangaldoi, Assam 784125</p>
+    <p><i class="fab fa-facebook"></i> facebook.comDemocoake/p>
+    <p><i class="fas fa-location-dot"></i> C2MM+Q5 Mangaldoi, Assam</p>
+  </div>
+
+  <!-- Google Map embed with the exact short link -->
+  <div class="map-container">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3573.486554329408!2d92.0317!3d26.4499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x37446d9a3a5a5a5d%3A0x9f9e8b9a9b9b9b9b!2sThe%20Happy%20Corner!5e0!3m2!1sen!2sin!4v1715000000000" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <p class="text-center" style="margin:10px 0 30px;">
+    <a href="https://maps.app.goo.gl/oNrULXtj5L52TriPA" target="_blank" style="background:var(--primary); color:white; padding:14px 28px; border-radius:60px; text-decoration:none; display:inline-block; font-weight:600;">
+      <i class="fas fa-map-marked-alt"></i> Open in Google Maps
+    </a>
+  </p>
+
+  <!-- People also search for (from original) -->
+  <div style="background: #fff5ef; border-radius: 28px; padding: 20px; margin-bottom: 24px;">
+    <p style="font-weight: 700;"><i class="fas fa-search"></i> People also search for</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;">
+      <span class="chip">Cake bake 4.0★</span>
+      <span class="chip">Repose 4.1★</span>
+      <span class="chip">Jubi's Cake Corner</span>
+      <span class="chip">DELICACY CORNER 5.0★</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="margin: 20px 0 30px; text-align:center; color:#6b4f3f;">
+    <p>© Demo Cake · By Vagyasmita Choudhury · Mangaldoi</p>
+  </div>
+</div>
+
+<!-- Floating WhatsApp (placeholder) -->
+<a href="#" class="whatsapp-float" target="_blank" aria-label="Chat">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+  (function() {
+    // Mobile menu toggle
+    const toggleBtn = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    
+    function toggleMobileNav(e) {
+      e.stopPropagation();
+      mobileNav.classList.toggle('show');
+    }
+    toggleBtn.addEventListener('click', toggleMobileNav);
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileNav.classList.remove('show'));
+    });
+    document.addEventListener('click', (e) => {
+      if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('show')) {
+        mobileNav.classList.remove('show');
+      }
+    });
+
+    // Carousel auto slide
+    const slides = document.querySelectorAll('.carousel-slide');
+    const slidesContainer = document.getElementById('carouselSlides');
+    const dotsContainer = document.getElementById('carouselDots');
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    let autoSlideInterval;
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.classList.add('dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+    const dots = document.querySelectorAll('.dot');
+
+    function goToSlide(index) {
+      currentIndex = index;
+      slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      goToSlide(currentIndex);
+    }
+    function startAutoSlide() { autoSlideInterval = setInterval(nextSlide, 4000); }
+    function stopAutoSlide() { clearInterval(autoSlideInterval); }
+    startAutoSlide();
+    const carousel = document.querySelector('.carousel-container');
+    carousel.addEventListener('mouseenter', stopAutoSlide);
+    carousel.addEventListener('mouseleave', startAutoSlide);
+    carousel.addEventListener('touchstart', stopAutoSlide);
+    carousel.addEventListener('touchend', () => setTimeout(startAutoSlide, 2000));
+
+    // ---------- CAKE MENU DATA (different varieties) ----------
+    const menuItems = [
+      { name: "Signature Chocolate Cake", desc: "Rich, moist, decoration", price: "₹550", cat: "cake", img: "291528" },
+      { name: "Black Forest Cake", desc: "Cherries & cream", price: "₹580", cat: "cake", img: "264909" },
+      { name: "Chocolate Cupcake", desc: "Soft, not too sweet", price: "₹70", cat: "cupcake", img: "291528" },
+      { name: "Margherita Pizza", desc: "Cheesy, fresh basil", price: "₹180", cat: "pizza", img: "2147491" },
+      { name: "Veggie Supreme Pizza", desc: "Loaded with veggies", price: "₹220", cat: "pizza", img: "1437267" },
+      { name: "Bento Cake (Mini)", desc: "Surprise design", price: "₹350", cat: "bento", img: "264909" },
+      { name: "Custom Bento Cake", desc: "Personalised message", price: "₹420", cat: "bento", img: "291528" },
+      { name: "Chocolate Pastry", desc: "Layered ganache", price: "₹80", cat: "pastry", img: "291528" },
+      { name: "Cheesecake slice", desc: "Baked New York style", price: "₹130", cat: "pastry", img: "264909" },
+      { name: "Veggie Supreme Pizza", desc: "Loaded with veggies", price: "₹220", cat: "pizza", img: "1437267" }
+    ];
+
+    const menuGrid = document.getElementById('menuGrid');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    function renderMenu(category = 'all') {
+      const filtered = category === 'all' ? menuItems : menuItems.filter(i => i.cat === category);
+      menuGrid.innerHTML = filtered.map(item => `
+        <div class="menu-card">
+          <div class="menu-img" style="background-image: url('https://images.pexels.com/photos/${item.img}/pexels-photo-${item.img}.jpeg?auto=compress&cs=tinysrgb&w=300');"></div>
+          <h4>${item.name}</h4>
+          <div style="font-size:0.85rem; color:#5a4a3e;">${item.desc}</div>
+          <div class="menu-price">${item.price}</div>
+        </div>
+      `).join('');
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderMenu(this.dataset.cat);
+      });
+    });
+    renderMenu('all');
+
+    // smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === "#" || href === "") return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  })();
+</script>
+<!-- small style tune -->
+<style>
+  .carousel-slide h3 { font-size: 1.6rem; }
+  .menu-card h4 { font-size: 1rem; margin: 8px 0 4px; }
+  .filter-btn { user-select: none; }
+  .whatsapp-float i { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+  .map-container iframe { border-radius: 28px; }
+  .mobile-nav a:active { background: #f7e5da; border-radius: 20px; }
+</style>
+
+</body></html>
